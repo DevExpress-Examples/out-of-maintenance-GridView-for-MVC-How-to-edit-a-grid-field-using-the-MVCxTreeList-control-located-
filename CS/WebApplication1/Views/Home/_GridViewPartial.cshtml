@@ -1,0 +1,46 @@
+﻿@using WebApplication1.Models
+
+@model List<Customer>
+
+@Html.DevExpress().GridView(settings => {
+    settings.Name = "GridView1";
+    settings.KeyFieldName = "CustomerID";
+    settings.CallbackRouteValues = new { Controller = "Home", Action = "GridViewPartial" };
+    settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewAddNewPartial" };
+    settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Home", Action = "GridViewUpdatePartial" };
+    settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewDeletePartial" };
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowEditButton = true;
+    settings.Columns.Add("CustomerID", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add("CustomerName", MVCxGridViewColumnType.TextBox);
+    settings.Columns.Add(col => {
+        col.FieldName = "Licenses";
+        col.ColumnType = MVCxGridViewColumnType.TextBox;
+        col.SetEditItemTemplateContent(tc => {
+            //DropDownEdit
+            Html.DevExpress().DropDownEdit(ddeSettings => {
+                ddeSettings.Name = "Licenses";
+                ddeSettings.SetDropDownWindowTemplateContent(ddec => {
+                    //TreeList
+                    Html.RenderAction("TreeListPartial",new { ddeValue = DataBinder.Eval(tc.DataItem, "Licenses") });
+                    //Button
+                    Html.DevExpress().Button(btnSettings => {
+                        btnSettings.Name = "confirmBtn";
+                        btnSettings.Text = "OK";
+                        btnSettings.Width = new Unit(100, UnitType.Percentage);
+                        btnSettings.ClientSideEvents.Click = "OnConfirmBtnClick";
+                    }).Render();
+
+                });
+                ddeSettings.Init = (s, e) => {
+                    MVCxDropDownEdit dde = (MVCxDropDownEdit)s;
+                    dde.ClientSideEvents.QueryCloseUp = "OnDropDownEditQueryClose";
+                    dde.Value = DataBinder.Eval(tc.DataItem, "Licenses");
+                };
+            }).Render();
+
+        });
+    });
+
+
+}).Bind(Model).GetHtml()

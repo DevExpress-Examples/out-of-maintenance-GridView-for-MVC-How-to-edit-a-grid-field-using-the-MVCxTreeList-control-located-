@@ -1,0 +1,32 @@
+﻿@using WebApplication1.Models
+
+@model List<License>
+
+@functions{
+    public void OnDataBound(object sender, EventArgs e) {
+        MVCxTreeList treeList = (MVCxTreeList)sender;
+        if (ViewData["ddeValue"] != null && ViewData["ddeValue"].ToString() != String.Empty)
+            SelectNodes(ViewData["ddeValue"].ToString(), treeList);
+    }
+
+    public void SelectNodes(string ddeValue, MVCxTreeList treeList) {
+        var nodesKeys = ddeValue.Split(',').ToList();
+        foreach (var nodeKey in nodesKeys) {
+            var node = treeList.FindNodeByKeyValue(nodeKey);
+            node.Selected = node != null;
+        }
+    }
+
+}
+
+@Html.DevExpress().TreeList(settings => {
+    settings.Name = "TreeList1";
+    settings.KeyFieldName = "LicenseID";
+    settings.CallbackRouteValues = new { Controller = "Home", Action = "TreeListPartial" };
+    settings.Columns.Add("LicenseName", MVCxTreeListColumnType.TextBox);
+    settings.Columns.Add("LicenseID", MVCxTreeListColumnType.TextBox);
+    settings.ParentFieldName = "ParentLicenseID";
+    settings.SettingsSelection.Enabled = true;
+    settings.SettingsSelection.AllowSelectAll = true;
+    settings.DataBound =  OnDataBound;
+}).Bind(Model).GetHtml()
