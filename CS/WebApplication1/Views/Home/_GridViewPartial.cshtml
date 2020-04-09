@@ -1,6 +1,14 @@
 ﻿@using WebApplication1.Models
+@using WebApplication1.Code
 
 @model List<Customer>
+
+@functions{
+    public void OnCustomColumnDisplayText(object sender, ASPxGridViewColumnDisplayTextEventArgs e) {
+        if (e.Column.FieldName != "Licenses" || e.Value == null) return;
+        e.DisplayText = ValueAndDisplayTextHelper.GetDisplayTextString(e.Value.ToString());
+    }
+}
 
 @Html.DevExpress().GridView(settings => {
     settings.Name = "GridView1";
@@ -11,6 +19,8 @@
     settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewDeletePartial" };
     settings.CommandColumn.Visible = true;
     settings.CommandColumn.ShowEditButton = true;
+    settings.CommandColumn.ShowNewButtonInHeader = true;
+    settings.CustomColumnDisplayText = OnCustomColumnDisplayText;
     settings.Columns.Add("CustomerID", MVCxGridViewColumnType.TextBox);
     settings.Columns.Add("CustomerName", MVCxGridViewColumnType.TextBox);
     settings.Columns.Add(col => {
@@ -19,28 +29,30 @@
         col.SetEditItemTemplateContent(tc => {
             //DropDownEdit
             Html.DevExpress().DropDownEdit(ddeSettings => {
-                ddeSettings.Name = "Licenses";
+                ddeSettings.Name = "DropDownEdit1";
+                ddeSettings.Properties.ClientSideEvents.TextChanged = "synchronizeTreeListValues";
+                ddeSettings.Properties.ClientSideEvents.DropDown = "synchronizeTreeListValues";
+                ddeSettings.Properties.ClientSideEvents.QueryCloseUp = "OnDropDownEditQueryClose";
                 ddeSettings.SetDropDownWindowTemplateContent(ddec => {
                     //TreeList
-                    Html.RenderAction("TreeListPartial",new { ddeValue = DataBinder.Eval(tc.DataItem, "Licenses") });
+                    Html.RenderAction("TreeListPartial");
                     //Button
                     Html.DevExpress().Button(btnSettings => {
                         btnSettings.Name = "confirmBtn";
+                        btnSettings.ControlStyle.CssClass = "myBtn";
                         btnSettings.Text = "OK";
-                        btnSettings.Width = new Unit(100, UnitType.Percentage);
+                        btnSettings.Width = new Unit(99, UnitType.Percentage);
+                        btnSettings.Height = new Unit(25, UnitType.Pixel);
                         btnSettings.ClientSideEvents.Click = "OnConfirmBtnClick";
                     }).Render();
-
                 });
                 ddeSettings.Init = (s, e) => {
                     MVCxDropDownEdit dde = (MVCxDropDownEdit)s;
-                    dde.ClientSideEvents.QueryCloseUp = "OnDropDownEditQueryClose";
-                    dde.Value = DataBinder.Eval(tc.DataItem, "Licenses");
+                    var value = DataBinder.Eval(tc.DataItem, "Licenses");
+                    dde.Value = value == null ? null : ValueAndDisplayTextHelper.GetDisplayTextString(value.ToString());
                 };
             }).Render();
 
         });
     });
-
-
 }).Bind(Model).GetHtml()

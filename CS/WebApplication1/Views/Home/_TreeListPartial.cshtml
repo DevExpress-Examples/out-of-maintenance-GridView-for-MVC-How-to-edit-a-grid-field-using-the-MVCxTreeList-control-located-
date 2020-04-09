@@ -2,31 +2,36 @@
 
 @model List<License>
 
-@functions{
-    public void OnDataBound(object sender, EventArgs e) {
-        MVCxTreeList treeList = (MVCxTreeList)sender;
-        if (ViewData["ddeValue"] != null && ViewData["ddeValue"].ToString() != String.Empty)
-            SelectNodes(ViewData["ddeValue"].ToString(), treeList);
-    }
-
-    public void SelectNodes(string ddeValue, MVCxTreeList treeList) {
-        var nodesKeys = ddeValue.Split(',').ToList();
-        foreach (var nodeKey in nodesKeys) {
-            var node = treeList.FindNodeByKeyValue(nodeKey);
-            node.Selected = node != null;
-        }
-    }
-
-}
-
 @Html.DevExpress().TreeList(settings => {
     settings.Name = "TreeList1";
     settings.KeyFieldName = "LicenseID";
     settings.CallbackRouteValues = new { Controller = "Home", Action = "TreeListPartial" };
+    settings.CustomActionRouteValues = new { Controller = "Home", Action = "TreeListCustomPartial" };
     settings.Columns.Add("LicenseName", MVCxTreeListColumnType.TextBox);
     settings.Columns.Add("LicenseID", MVCxTreeListColumnType.TextBox);
     settings.ParentFieldName = "ParentLicenseID";
     settings.SettingsSelection.Enabled = true;
     settings.SettingsSelection.AllowSelectAll = true;
-    settings.DataBound =  OnDataBound;
+    settings.ClientSideEvents.EndCallback = "OnTreeListEndCallback";
+    settings.ControlStyle.CssClass = "myTreeList";
+    settings.BeforeGetCallbackResult = (sender, e) => {
+        MVCxTreeList tl = sender as MVCxTreeList;
+        if (ViewBag.Selection != null) {
+            tl.UnselectAll();
+            if (ViewBag.Selection != String.Empty) {
+                string textsString = ViewBag.Selection;
+                var texts = textsString.Split(',');
+                List<string> nodesText = new List<string>();
+                foreach (var text in texts) {
+                    tl.FindNodesByFieldValue("LicenseName", text).ForEach(node => {
+                        if (!node.Selected) {
+                            node.Selected = true;
+                            nodesText.Add(node.GetValue("LicenseName").ToString());
+                        }
+                    });
+                }
+                tl.JSProperties.Add("cp_selectedTexts", nodesText);
+            }
+        }
+    };
 }).Bind(Model).GetHtml()

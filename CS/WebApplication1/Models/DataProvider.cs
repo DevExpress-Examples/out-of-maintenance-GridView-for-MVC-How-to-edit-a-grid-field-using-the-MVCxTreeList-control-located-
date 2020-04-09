@@ -34,7 +34,7 @@ namespace WebApplication1.Models {
 
         private static string GetLicensesForCustomer(int customerID) {
             var licenses = string.Join(",", LicensesDataProvider.GetLicenses().Take(customerID % 8).Select(s => s.LicenseID));
-            return licenses;
+            return licenses == String.Empty ? null : licenses;
         }
 
         public static void UpdateCustomer(Customer customer) {

@@ -17,6 +17,15 @@
                     New Script With {.ExtensionSuite = ExtensionSuite.GridView},
                     New Script With {.ExtensionSuite = ExtensionSuite.TreeList}
                     )
+    <style>
+        .myBtn {
+            margin: 1px !important;
+        }
+
+        .myTreeList {
+            margin: 1px;
+        }
+    </style>
 </head>
 
 <body>

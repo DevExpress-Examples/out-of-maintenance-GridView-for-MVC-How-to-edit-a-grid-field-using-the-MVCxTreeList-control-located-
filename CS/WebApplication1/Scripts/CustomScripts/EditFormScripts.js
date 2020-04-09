@@ -1,12 +1,26 @@
 ﻿function OnDropDownEditQueryClose(s, e) {
-    TreeList1.GetSelectedNodeValues("LicenseID", function (values) { SetDropDownEditValue(values, s) });
+    TreeList1.GetSelectedNodeValues("LicenseName", OnGetSelectedNodeValues);
 }
 function OnConfirmBtnClick(s, e) {
-    Licenses.HideDropDown();
+    DropDownEdit1.HideDropDown();
 }
-function SetDropDownEditValue(values, s) {
+function OnGetSelectedNodeValues(values) {
     let valueString = "";
     if (values != null && values.length > 0)
         valueString = valueString.concat(values);
-    s.SetValue(valueString);
+    DropDownEdit1.SetValue(valueString);
 }
+
+function OnTreeListEndCallback(s, e) {
+    if (e.command != "CustomCallback") return;
+    updateText();
+}
+
+function updateText() {    
+    DropDownEdit1.SetText(TreeList1.cp_selectedTexts);
+}
+function synchronizeTreeListValues(s, e) {    
+    var texts = s.GetText();
+    TreeList1.PerformCallback({ textsString: texts });        
+}
+
