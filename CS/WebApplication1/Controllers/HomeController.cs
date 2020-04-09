@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApplication1.Code;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers {
@@ -12,8 +13,11 @@ namespace WebApplication1.Controllers {
             return View();
         }
 
-        public ActionResult TreeListPartial(string ddeValue) {
-            ViewData["ddeValue"] = ddeValue;
+        public ActionResult TreeListPartial() {
+            return PartialView("_TreeListPartial", LicensesDataProvider.GetLicenses());
+        }
+        public ActionResult TreeListCustomPartial(string textsString) {
+            ViewBag.Selection = textsString;
             return PartialView("_TreeListPartial", LicensesDataProvider.GetLicenses());
         }
         public ActionResult GridViewPartial() {
@@ -26,6 +30,9 @@ namespace WebApplication1.Controllers {
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewUpdatePartial(Customer customer) {
+            var dropDownEditText = DropDownEditExtension.GetValue<string>("DropDownEdit1");
+            var fieldValue = ValueAndDisplayTextHelper.GetValueString(dropDownEditText);
+            customer.Licenses = fieldValue;
             CustomersDataProvider.UpdateCustomer(customer);
             return GridViewPartial();
         }
