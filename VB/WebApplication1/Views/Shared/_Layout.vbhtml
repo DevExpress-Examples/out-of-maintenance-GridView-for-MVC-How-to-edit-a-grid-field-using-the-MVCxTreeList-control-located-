@@ -18,12 +18,9 @@
                     New Script With {.ExtensionSuite = ExtensionSuite.TreeList}
                     )
     <style>
-        .myBtn {
-            margin: 1px !important;
-        }
-
-        .myTreeList {
-            margin: 1px;
+        .ctrlContainer {
+            width: 100%;
+            padding: 1%;
         }
     </style>
 </head>
