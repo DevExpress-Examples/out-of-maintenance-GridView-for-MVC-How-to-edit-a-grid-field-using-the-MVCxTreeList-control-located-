@@ -30,21 +30,25 @@
             //DropDownEdit
             Html.DevExpress().DropDownEdit(ddeSettings => {
                 ddeSettings.Name = "DropDownEdit1";
+                ddeSettings.Width = new Unit(100, UnitType.Percentage);
                 ddeSettings.Properties.ClientSideEvents.TextChanged = "synchronizeTreeListValues";
                 ddeSettings.Properties.ClientSideEvents.DropDown = "synchronizeTreeListValues";
                 ddeSettings.Properties.ClientSideEvents.QueryCloseUp = "OnDropDownEditQueryClose";
                 ddeSettings.SetDropDownWindowTemplateContent(ddec => {
                     //TreeList
+                    Html.ViewContext.Writer.Write("<div class='ctrlContainer'>");
                     Html.RenderAction("TreeListPartial");
+                    Html.ViewContext.Writer.Write("</div>");
                     //Button
+                    Html.ViewContext.Writer.Write("<div class='ctrlContainer'>");
                     Html.DevExpress().Button(btnSettings => {
                         btnSettings.Name = "confirmBtn";
-                        btnSettings.ControlStyle.CssClass = "myBtn";
                         btnSettings.Text = "OK";
-                        btnSettings.Width = new Unit(99, UnitType.Percentage);
-                        btnSettings.Height = new Unit(25, UnitType.Pixel);
+                        btnSettings.Width = new Unit(98, UnitType.Percentage);
+                        btnSettings.Style.Add(HtmlTextWriterStyle.Margin, "0px!important");
                         btnSettings.ClientSideEvents.Click = "OnConfirmBtnClick";
                     }).Render();
+                    Html.ViewContext.Writer.Write("</div>");
                 });
                 ddeSettings.Init = (s, e) => {
                     MVCxDropDownEdit dde = (MVCxDropDownEdit)s;

@@ -26,8 +26,6 @@ End Functions
                                      settings.Columns.Add("CustomerName", MVCxGridViewColumnType.TextBox)
                                      settings.Columns.Add(Sub(col)
                                                               'DropDownEdit
-                                                              'TreeList
-                                                              'Button
                                                               col.FieldName = "Licenses"
                                                               col.ColumnType = MVCxGridViewColumnType.TextBox
                                                               col.SetEditItemTemplateContent(Sub(tc)
@@ -36,16 +34,22 @@ End Functions
                                                                                                                                     ddeSettings.Properties.ClientSideEvents.TextChanged = "synchronizeTreeListValues"
                                                                                                                                     ddeSettings.Properties.ClientSideEvents.DropDown = "synchronizeTreeListValues"
                                                                                                                                     ddeSettings.Properties.ClientSideEvents.QueryCloseUp = "OnDropDownEditQueryClose"
+                                                                                                                                    ddeSettings.Width = New Unit(100, UnitType.Percentage)
                                                                                                                                     ddeSettings.SetDropDownWindowTemplateContent(Sub(ddec)
+                                                                                                                                                                                     'TreeList
+                                                                                                                                                                                     Html.ViewContext.Writer.Write("<div class='ctrlContainer'>")
                                                                                                                                                                                      Html.RenderAction("TreeListPartial")
+                                                                                                                                                                                     'Button
+                                                                                                                                                                                     Html.ViewContext.Writer.Write("</div>")
+                                                                                                                                                                                     Html.ViewContext.Writer.Write("<div class='ctrlContainer'>")
                                                                                                                                                                                      Html.DevExpress().Button(Sub(btnSettings)
                                                                                                                                                                                                                   btnSettings.Name = "confirmBtn"
-                                                                                                                                                                                                                  btnSettings.ControlStyle.CssClass = "myBtn"
                                                                                                                                                                                                                   btnSettings.Text = "OK"
-                                                                                                                                                                                                                  btnSettings.Width = New Unit(99, UnitType.Percentage)
-                                                                                                                                                                                                                  btnSettings.Height = New Unit(25, UnitType.Pixel)
+                                                                                                                                                                                                                  btnSettings.Width = New Unit(98, UnitType.Percentage)
+                                                                                                                                                                                                                  btnSettings.Style.Add(HtmlTextWriterStyle.Margin, "0px!important")
                                                                                                                                                                                                                   btnSettings.ClientSideEvents.Click = "OnConfirmBtnClick"
                                                                                                                                                                                                               End Sub).Render()
+                                                                                                                                                                                     Html.ViewContext.Writer.Write("</div>")
                                                                                                                                                                                  End Sub)
                                                                                                                                     ddeSettings.Init = Sub(s, e)
                                                                                                                                                            Dim dde As MVCxDropDownEdit = CType(s, MVCxDropDownEdit)

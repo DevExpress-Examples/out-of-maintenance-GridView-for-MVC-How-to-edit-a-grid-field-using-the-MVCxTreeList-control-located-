@@ -13,7 +13,7 @@
                                      settings.SettingsSelection.Enabled = True
                                      settings.SettingsSelection.AllowSelectAll = True
                                      settings.ClientSideEvents.EndCallback = "OnTreeListEndCallback"
-                                     settings.ControlStyle.CssClass = "myTreeList"
+                                     settings.Width = New Unit(98, UnitType.Percentage)
                                      settings.BeforeGetCallbackResult = Sub(sender, e)
                                                                             Dim tl As MVCxTreeList = TryCast(sender, MVCxTreeList)
                                                                             If ViewBag.Selection IsNot Nothing Then
@@ -24,7 +24,7 @@
                                                                                     Dim nodesText As New List(Of String)()
                                                                                     For Each textStr In texts
                                                                                         tl.FindNodesByFieldValue("LicenseName", textStr).ForEach(Sub(node)
-                                                                                                                                                     
+
                                                                                                                                                      If Not node.Selected Then
                                                                                                                                                          node.Selected = True
                                                                                                                                                          nodesText.Add(node.GetValue("LicenseName").ToString())

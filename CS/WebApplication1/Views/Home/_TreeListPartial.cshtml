@@ -10,10 +10,10 @@
     settings.Columns.Add("LicenseName", MVCxTreeListColumnType.TextBox);
     settings.Columns.Add("LicenseID", MVCxTreeListColumnType.TextBox);
     settings.ParentFieldName = "ParentLicenseID";
+    settings.Width = new Unit(98, UnitType.Percentage);
     settings.SettingsSelection.Enabled = true;
     settings.SettingsSelection.AllowSelectAll = true;
     settings.ClientSideEvents.EndCallback = "OnTreeListEndCallback";
-    settings.ControlStyle.CssClass = "myTreeList";
     settings.BeforeGetCallbackResult = (sender, e) => {
         MVCxTreeList tl = sender as MVCxTreeList;
         if (ViewBag.Selection != null) {
