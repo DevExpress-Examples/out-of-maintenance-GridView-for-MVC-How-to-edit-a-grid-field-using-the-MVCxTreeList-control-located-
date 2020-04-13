@@ -4,9 +4,9 @@
 <!-- run online end -->
 
 This example illustrates how to:  
-- Replace the default column editor with the MVCxDropDownEdit control and put the MVCxTreeView control into the dropdown window template;
-- Implement the client-side logic to bind the MVCxDropDownEdit control value depending on the MVCxTreeView control selection;
-- Implement the server-side logic to select MVCxTreeView nodes depending on the grid field value.
+- Replace the default column editor with the MVCxDropDownEdit control and put the MVCxTreeList control into the dropdown window template;
+- Implement the client-side logic to bind the MVCxDropDownEdit control value depending on the MVCxTreeList control selection;
+- Implement the server-side logic to select MVCxTreeList nodes depending on the grid field value.
 
 
 <!-- default file list --> 
