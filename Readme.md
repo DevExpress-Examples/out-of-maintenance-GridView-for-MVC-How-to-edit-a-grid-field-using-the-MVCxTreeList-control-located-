@@ -1,4 +1,4 @@
-# GridView for MVC - How to edit a grid field using the MVCxTreeList control located inside MVCxDropDownEdit
+# GridView for MVC - How to edit a grid field using the MVCxTreeList located inside MVCxDropDownEdit
 <!-- run online -->
 **[[Run Online]](https://codecentral.devexpress.com/254082779/)**
 <!-- run online end -->
